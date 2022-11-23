@@ -5,19 +5,18 @@ import {
   Tr,
   Th,
   Td,
-  // TableCaption,
   TableContainer,
   Heading,
 } from '@chakra-ui/react';
-import db from 'db/db.json';
-const DataTable = () => {
+
+const DataTable = ({ films }) => {
   return (
     <TableContainer>
       <Heading as="h1" size="xl">
         Top TV Show List
       </Heading>
+
       <Table variant="striped" colorScheme="red">
-        {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
         <Thead>
           <Tr>
             <Th>Title</Th>
@@ -28,7 +27,7 @@ const DataTable = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {db.films.map(({ id, title, language, genre, runtime, status }) => (
+          {films.map(({ id, title, language, genre, runtime, status }) => (
             <Tr key={id}>
               <Td>{title}</Td>
               <Td>{language}</Td>
