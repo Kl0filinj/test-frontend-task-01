@@ -11,30 +11,9 @@ import {
   WrapItem,
   Button,
 } from '@chakra-ui/react';
-// import { addFilm } from 'services/api';
-import * as Yup from 'yup';
+import schema from 'utils/yupSchema';
+import { GENRES, LANGUAGES } from 'utils/constans';
 import { useState } from 'react';
-
-const schema = Yup.object().shape({
-  title: Yup.string().min(5).max(15).required(),
-  language: Yup.string().required(),
-  genre: Yup.array(),
-  runtime: Yup.string().required(),
-  status: Yup.string().required(),
-});
-
-const GENRES = [
-  'Adventure',
-  'Drama',
-  'Horror',
-  'Comedy',
-  'Family',
-  'Fantasy',
-  'History',
-  'Nature',
-  'Science-fiction',
-  'Romance',
-];
 
 const AddingForm = ({ addFilm, closeModal }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -82,12 +61,11 @@ const AddingForm = ({ addFilm, closeModal }) => {
           value={formik.values.language}
           onChange={formik.handleChange}
         >
-          <option value="english">English</option>
-          <option value="ukrainian">Ukrainian</option>
-          <option value="chinese">Chinese</option>
-          <option value="korean">Korean</option>
-          <option value="spanish">Spanish</option>
-          <option value="italian">Italian</option>
+          {LANGUAGES.map(item => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
         </Select>
         {!Boolean(formik.errors.language) ? (
           <FormHelperText>Select the Movie Language</FormHelperText>
@@ -154,7 +132,7 @@ const AddingForm = ({ addFilm, closeModal }) => {
           <FormErrorMessage>{formik.errors.status}</FormErrorMessage>
         )}
       </FormControl>
-      <Button mt={4} colorScheme="teal" isLoading={isLoading} type="submit">
+      <Button mt={4} colorScheme="red" isLoading={isLoading} type="submit">
         Submit
       </Button>
     </form>

@@ -7,19 +7,28 @@ import {
   Td,
   TableContainer,
   Heading,
+  Box,
 } from '@chakra-ui/react';
 import EditModal from './Modal';
 
 const DataTable = ({ films, addFilm }) => {
-  console.log(films);
   return (
-    <TableContainer>
-      <Heading as="h1" size="xl">
-        Top TV Show List
-      </Heading>
-      <EditModal addFilm={addFilm} />
+    <TableContainer border="1px" borderColor="black" borderRadius="xl">
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        p="8"
+        bg="red.200"
+      >
+        <Heading as="h1" size="xl">
+          Top TV Show List
+        </Heading>
+        <EditModal addFilm={addFilm} />
+      </Box>
+
       <Table variant="striped" colorScheme="red">
-        <Thead>
+        <Thead bg="gray.800">
           <Tr>
             <Th>Title</Th>
             <Th>Language</Th>
@@ -33,7 +42,7 @@ const DataTable = ({ films, addFilm }) => {
             <Tr key={id}>
               <Td>{title}</Td>
               <Td>{language}</Td>
-              <Td>{genre}</Td>
+              <Td overflow="hidden">{genre.join(', ')}</Td>
               <Td isNumeric>{runtime}</Td>
               <Td>{status}</Td>
             </Tr>
