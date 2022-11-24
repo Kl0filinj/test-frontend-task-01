@@ -24,7 +24,9 @@ export const App = () => {
         setFilms(prevFilms => [...prevFilms, response]);
       }
     } catch (error) {
-      toast.error('Something went wrong, try to reload the page');
+      toast.error(
+        `Something went wrong, try to reload the page, ${error.message}`
+      );
       console.error(error);
       setError(error);
     }
