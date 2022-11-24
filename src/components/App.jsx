@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getFilms } from 'services/api';
 import { addFilm } from 'services/api';
+import Loader from './Loader';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Wrapper from './Container';
 import DataTable from './DataTable';
@@ -23,11 +24,9 @@ export const App = () => {
 
   useEffect(() => {
     async function getFilmsList() {
-      // setIsLoading(true);
       const films = await getFilms(page);
       setFilms(prevFilms => [...prevFilms, ...films.list]);
       setTotalCount(films.totalCount);
-      // setIsLoading(false);
     }
     getFilmsList();
   }, [page]);
@@ -35,25 +34,15 @@ export const App = () => {
   return (
     <Wrapper>
       <InfiniteScroll
-        dataLength={films.length} //This is important field to render the next data
+        dataLength={films.length}
         next={() => setPage(prevState => prevState + 1)}
         hasMore={!hasMore}
-        loader={<h4>Loading...</h4>}
+        loader={<Loader />}
         endMessage={
           <p style={{ textAlign: 'center' }}>
             <b>Yay! You have seen it all</b>
           </p>
         }
-        // below props only if you need pull down functionality
-        // refreshFunction={this.refresh}
-        // pullDownToRefresh
-        // pullDownToRefreshThreshold={50}
-        // pullDownToRefreshContent={
-        //   <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-        // }
-        // releaseToRefreshContent={
-        //   <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-        // }
       >
         <DataTable films={films} addFilm={addFilmHandler} />
       </InfiniteScroll>

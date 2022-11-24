@@ -21,7 +21,7 @@ const EditModal = ({ addFilm }) => {
           <ModalHeader>Add New Film</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <AddingForm addFilm={addFilm} />
+            <AddingForm addFilm={addFilm} closeModal={onClose} />
           </ModalBody>
         </ModalContent>
       </Modal>

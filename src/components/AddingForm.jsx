@@ -18,7 +18,7 @@ import { useState } from 'react';
 const schema = Yup.object().shape({
   title: Yup.string().min(5).max(15).required(),
   language: Yup.string().required(),
-  genre: Yup.array().required(),
+  genre: Yup.array(),
   runtime: Yup.string().required(),
   status: Yup.string().required(),
 });
@@ -36,7 +36,7 @@ const GENRES = [
   'Romance',
 ];
 
-const AddingForm = ({ addFilm }) => {
+const AddingForm = ({ addFilm, closeModal }) => {
   const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -52,15 +52,7 @@ const AddingForm = ({ addFilm }) => {
       addFilm(values);
       setIsLoading(false);
       actions.resetForm();
-      // try {
-      //   setIsLoading(true);
-      //   await addFilm(values);
-      // } catch (error) {
-      //   console.error(error);
-      // } finally {
-      //   setIsLoading(false);
-      //   actions.resetForm();
-      // }
+      closeModal();
     },
   });
   return (
