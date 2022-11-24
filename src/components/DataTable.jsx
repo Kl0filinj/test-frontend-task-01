@@ -10,13 +10,14 @@ import {
 } from '@chakra-ui/react';
 import EditModal from './Modal';
 
-const DataTable = ({ films }) => {
+const DataTable = ({ films, addFilm }) => {
+  console.log(films);
   return (
     <TableContainer>
       <Heading as="h1" size="xl">
         Top TV Show List
       </Heading>
-      <EditModal />
+      <EditModal addFilm={addFilm} />
       <Table variant="striped" colorScheme="red">
         <Thead>
           <Tr>
@@ -28,7 +29,7 @@ const DataTable = ({ films }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {films.map(({ id, title, language, genre, runtime, status }) => (
+          {films.map(({ title, language, genre, runtime, status, id }) => (
             <Tr key={id}>
               <Td>{title}</Td>
               <Td>{language}</Td>

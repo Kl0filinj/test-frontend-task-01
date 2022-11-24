@@ -2,50 +2,70 @@ import { useFormik } from 'formik';
 import {
   FormControl,
   FormLabel,
-  //   FormErrorMessage,
   Input,
   Select,
+  Checkbox,
   FormHelperText,
+  FormErrorMessage,
+  Wrap,
+  WrapItem,
   Button,
 } from '@chakra-ui/react';
+// import { addFilm } from 'services/api';
 import * as Yup from 'yup';
-
-// const initialValues = {
-//   title: '',
-//   language: 'English',
-//   genre: [],
-//   runtime: '60',
-//   status: 'Ended',
-// };
+import { useState } from 'react';
 
 const schema = Yup.object().shape({
   title: Yup.string().min(5).max(15).required(),
   language: Yup.string().required(),
-  genre: Yup.string().required(),
+  genre: Yup.array().required(),
   runtime: Yup.string().required(),
   status: Yup.string().required(),
 });
 
-const AddingForm = () => {
+const GENRES = [
+  'Adventure',
+  'Drama',
+  'Horror',
+  'Comedy',
+  'Family',
+  'Fantasy',
+  'History',
+  'Nature',
+  'Science-fiction',
+  'Romance',
+];
+
+const AddingForm = ({ addFilm }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       title: '',
       language: 'English',
-      genre: 'adventure',
+      genre: [],
       runtime: '60',
       status: 'Ended',
     },
     validationSchema: schema,
     onSubmit: (values, actions) => {
-      //   onSubmit(values.name, values.number);
-      console.log(values);
+      setIsLoading(true);
+      addFilm(values);
+      setIsLoading(false);
       actions.resetForm();
+      // try {
+      //   setIsLoading(true);
+      //   await addFilm(values);
+      // } catch (error) {
+      //   console.error(error);
+      // } finally {
+      //   setIsLoading(false);
+      //   actions.resetForm();
+      // }
     },
   });
-  console.log(formik);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <FormControl>
+      <FormControl isInvalid={Boolean(formik.errors.title)}>
         <FormLabel>Title</FormLabel>
         <Input
           type="text"
@@ -54,12 +74,14 @@ const AddingForm = () => {
           label="Title"
           value={formik.values.title}
           onChange={formik.handleChange}
-          //   error={formik.touched.title && Boolean(formik.errors.title)}
-          //   title={formik.touched.title && formik.errors.title}
         />
-        <FormHelperText>Insert Title name</FormHelperText>
+        {!Boolean(formik.errors.title) ? (
+          <FormHelperText>Enter the Movie Title</FormHelperText>
+        ) : (
+          <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
+        )}
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={Boolean(formik.errors.language)}>
         <FormLabel>Language</FormLabel>
         <Select
           id="language"
@@ -67,8 +89,6 @@ const AddingForm = () => {
           label="Language"
           value={formik.values.language}
           onChange={formik.handleChange}
-          //   error={formik.touched.language && Boolean(formik.errors.language)}
-          //   title={formik.touched.language && formik.errors.language}
         >
           <option value="english">English</option>
           <option value="ukrainian">Ukrainian</option>
@@ -77,33 +97,34 @@ const AddingForm = () => {
           <option value="spanish">Spanish</option>
           <option value="italian">Italian</option>
         </Select>
-        <FormHelperText>Insert language</FormHelperText>
+        {!Boolean(formik.errors.language) ? (
+          <FormHelperText>Select the Movie Language</FormHelperText>
+        ) : (
+          <FormErrorMessage>{formik.errors.language}</FormErrorMessage>
+        )}
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={Boolean(formik.errors.genre)}>
         <FormLabel>Genre(s)</FormLabel>
-        <Select
-          id="genre"
-          name="genre"
-          label="Genre"
-          value={formik.values.genre}
-          onChange={formik.handleChange}
-          //   error={formik.touched.genre && Boolean(formik.errors.genre)}
-          //   title={formik.touched.genre && formik.errors.genre}
-        >
-          <option value="adventure">Adventure</option>
-          <option value="drama">Drama</option>
-          <option value="horror">Horror</option>
-          <option value="comedy">Comedy</option>
-          <option value="family">Family</option>
-          <option value="fantasy">Fantasy</option>
-          <option value="history">History</option>
-          <option value="nature">Nature</option>
-          <option value="science-fiction">Science-Fiction</option>
-          <option value="romance">Romance</option>
-        </Select>
-        <FormHelperText>Insert Gener name</FormHelperText>
+        <Wrap spacing={2} pl="1">
+          {GENRES.map(item => (
+            <WrapItem key={item}>
+              <Checkbox
+                value={item}
+                name="genre"
+                onChange={formik.handleChange}
+              >
+                {item}
+              </Checkbox>
+            </WrapItem>
+          ))}
+        </Wrap>
+        {!Boolean(formik.errors.genre) ? (
+          <FormHelperText>Select the Movie Genre(s)</FormHelperText>
+        ) : (
+          <FormErrorMessage>{formik.errors.genre}</FormErrorMessage>
+        )}
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={Boolean(formik.errors.runtime)}>
         <FormLabel>Runtime</FormLabel>
         <Select
           id="runtime"
@@ -111,16 +132,18 @@ const AddingForm = () => {
           label="Runtime"
           value={formik.values.runtime}
           onChange={formik.handleChange}
-          //   error={formik.touched.runtime && Boolean(formik.errors.runtime)}
-          //   title={formik.touched.runtime && formik.errors.runtime}
         >
           <option value="30">30</option>
           <option value="60">60</option>
           <option value="120">120</option>
         </Select>
-        <FormHelperText>Insert Runtime name</FormHelperText>
+        {!Boolean(formik.errors.runtime) ? (
+          <FormHelperText>Select the Movie Runtime</FormHelperText>
+        ) : (
+          <FormErrorMessage>{formik.errors.runtime}</FormErrorMessage>
+        )}
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={Boolean(formik.errors.status)}>
         <FormLabel>Status</FormLabel>
         <Select
           id="status"
@@ -128,21 +151,18 @@ const AddingForm = () => {
           label="Status"
           value={formik.values.status}
           onChange={formik.handleChange}
-          //   error={formik.touched.status && Boolean(formik.errors.status)}
-          //   title={formik.touched.status && formik.errors.status}
         >
           <option value="ended">Ended</option>
           <option value="in-development">In Development</option>
           <option value="running">Running</option>
         </Select>
-        <FormHelperText>Insert Status name</FormHelperText>
+        {!Boolean(formik.errors.status) ? (
+          <FormHelperText>Select the Movie Status</FormHelperText>
+        ) : (
+          <FormErrorMessage>{formik.errors.status}</FormErrorMessage>
+        )}
       </FormControl>
-      <Button
-        mt={4}
-        colorScheme="teal"
-        // isLoading={props.isSubmitting}
-        type="submit"
-      >
+      <Button mt={4} colorScheme="teal" isLoading={isLoading} type="submit">
         Submit
       </Button>
     </form>

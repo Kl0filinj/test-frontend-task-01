@@ -10,19 +10,18 @@ import {
 } from '@chakra-ui/react';
 import AddingForm from './AddingForm';
 
-const EditModal = () => {
+const EditModal = ({ addFilm }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Button onClick={onOpen}>Open Modal</Button>
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add New Film</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <AddingForm />
+            <AddingForm addFilm={addFilm} />
           </ModalBody>
         </ModalContent>
       </Modal>
