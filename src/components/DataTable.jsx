@@ -8,6 +8,7 @@ import {
   TableContainer,
   Heading,
 } from '@chakra-ui/react';
+import EditModal from './Modal';
 
 const DataTable = ({ films }) => {
   return (
@@ -15,7 +16,7 @@ const DataTable = ({ films }) => {
       <Heading as="h1" size="xl">
         Top TV Show List
       </Heading>
-
+      <EditModal />
       <Table variant="striped" colorScheme="red">
         <Thead>
           <Tr>
